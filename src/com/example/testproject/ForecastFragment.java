@@ -10,12 +10,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import android.graphics.Interpolator.Result;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,6 +29,30 @@ import android.widget.ListView;
 public class ForecastFragment extends Fragment {
 
 	public ForecastFragment() {
+	}
+	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState){
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true); 
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+		inflater.inflate(R.menu.forecast_fragment, menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		int itemId = item.getItemId();
+		if (itemId==R.id.action_refresh){
+			FetcchWeatherTask fetchWeatherTask=new FetcchWeatherTask();
+			fetchWeatherTask.execute();
+			return true;
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -55,10 +81,11 @@ public class ForecastFragment extends Fragment {
 		return rootView;
 	}
 	
-	private class FetcchWeatherTask extends AsyncTask{
+	private class FetcchWeatherTask extends AsyncTask<Void, Void, Void>{
+		private final String LOG_TAG=FetcchWeatherTask.class.getSimpleName();
 
 		@Override
-		protected Object doInBackground(Object... params) {
+		protected Void doInBackground(Void... params) {
 			// These two need to be declared outside the try/catch
 			// so that they can be closed in the finally block.
 			HttpURLConnection urlConnection = null;
@@ -67,6 +94,7 @@ public class ForecastFragment extends Fragment {
 			// Will contain the raw JSON response as a string.
 			String forecastJsonStr = null;
 			 
+			Log.v(LOG_TAG, "test");
 			try {
 			    // Construct the URL for the OpenWeatherMap query
 			    // Possible parameters are available at OWM's forecast API page, at
@@ -100,6 +128,7 @@ public class ForecastFragment extends Fragment {
 			        forecastJsonStr = null;
 			    }
 			    forecastJsonStr = buffer.toString();
+			    Log.v(LOG_TAG, forecastJsonStr);
 			} catch (IOException e) {
 			    Log.e("PlaceholderFragment", "Error ", e);
 			    // If the code didn't successfully get the weather data, there's no point in attempting
@@ -120,6 +149,8 @@ public class ForecastFragment extends Fragment {
 			
 			return null;
 		}
+
+		
 		
 	}
 	
