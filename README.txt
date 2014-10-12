@@ -1,2 +1,5 @@
 This is a test project for learning Udacity Android development course.
-Lessoin 1
+
+
+http://api.openweathermap.org/data/2.5/find?q=Singapore&units=metric
+
