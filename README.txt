@@ -1,5 +1,5 @@
 This is a test project for learning Udacity Android development course.
 
 
-http://api.openweathermap.org/data/2.5/find?q=Singapore&units=metric
-
+To call for Singapore wheather forecast
+http://api.openweathermap.org/data/2.5/forecast/daily?q=Singapore&mode=json&units=metric&cnt=7
